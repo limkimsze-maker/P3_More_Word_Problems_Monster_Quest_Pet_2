@@ -1,0 +1,1045 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <title>Two-Part Money Word Problem — Variations</title>
+
+  <link rel="icon" href="./kimsze_sharp16.ico?v=20260111a" sizes="any">
+  <link rel="shortcut icon" href="./kimsze_sharp16.ico?v=20260111a">
+
+  <script>
+  (function(){
+    const ACTIVITY_ID = 'https://limkimsze-maker.github.io/Two_Part_Money_Variation_Blanks_20260404/';
+    try{
+      const gone=[];
+      for(let i=0;i<localStorage.length;i++){
+        const k=localStorage.key(i);
+        if(!k) continue;
+        if(k===ACTIVITY_ID || k.startsWith(ACTIVITY_ID+'::') || k.startsWith('sls_scope::'+ACTIVITY_ID) || k.startsWith('UFCO-firstSubmit::'+ACTIVITY_ID) || k.startsWith('sls_unlike_payload::'+ACTIVITY_ID)) gone.push(k);
+      }
+      gone.forEach(k=>localStorage.removeItem(k));
+      sessionStorage.removeItem('UFCO-firstSubmit::'+ACTIVITY_ID);
+      sessionStorage.removeItem('UFCO-lastTs::'+ACTIVITY_ID);
+      try{
+        const bc=new BroadcastChannel('xapi-state');
+        bc.postMessage({type:'clear',activityId:ACTIVITY_ID,ts:Date.now()});
+        bc.close();
+      }catch(e){}
+    }catch(e){}
+    window.__ACTIVITY_ID__ = ACTIVITY_ID;
+  })();
+  </script>
+
+  <script async src="https://cdn.counter.dev/script.js" data-id="825e93b6-ce99-40ef-8bcc-125f13297433" data-utcoffset="8"></script>
+
+  <style>
+    :root{
+      --bg:#eef2f8;
+      --card:#ffffff;
+      --board:#dbe2f0;
+      --panel:#e5ebf6;
+      --ink:#101828;
+      --muted:#5a6780;
+      --line:#182235;
+      --shadow:0 12px 28px rgba(15,23,42,.10);
+      --radius:22px;
+      --workspace:#ffffff;
+      --barA:#8fd3c1;
+      --barB:#f6c28b;
+      --barC:#7cc8f8;
+      --barD:#f7b0c8;
+      --blank:#fff6b8;
+      --blankBorder:#c1b86a;
+      --eqBg:#d5ecec;
+      --good:#dff3e6;
+      --bad:#ffe2e2;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:"Comic Sans MS","Comic Neue","Trebuchet MS",system-ui,sans-serif;
+      color:var(--ink);
+      background:linear-gradient(180deg,#f7f8fb,#eef2f8);
+      overflow:hidden;
+    }
+    .app{height:100vh;display:flex;flex-direction:column}
+    .topbar{display:none;}
+    .title h1{margin:0;font-size:12px;font-weight:1000;letter-spacing:.2px}
+    .title .sub{margin-top:2px;font-size:6px;color:var(--muted);font-weight:900}
+    .btn{
+      border:1px solid rgba(16,24,40,.12);background:#fff;color:#111827;
+      padding:12px 18px;border-radius:18px;font:inherit;font-weight:1000;cursor:pointer;
+      box-shadow:0 4px 12px rgba(15,23,42,.04);
+    }
+    .btn.primary{background:#0c1630;color:#fff;border-color:#0c1630}
+    .btn.checkYellow{background:#f5c84d;color:#111827;border-color:#e0b22e}
+    .btn:active{transform:translateY(1px)}
+    .main{
+      flex:1;min-height:0;padding:4px 8px 8px;display:grid;grid-template-columns:minmax(0,2.22fr) minmax(320px,.58fr);gap:10px;
+    }
+    .card{
+      background:var(--card);border:1px solid rgba(16,24,40,.08);border-radius:28px;box-shadow:var(--shadow);
+      display:flex;flex-direction:column;min-height:0;overflow:hidden;
+    }
+    .cardHd{
+      flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;
+      padding:12px 16px;border-bottom:1px solid rgba(16,24,40,.08);font-size:14px;font-weight:1000;
+    }
+    .cardHd .h{font-size:18px;font-weight:1000}
+    .leftBd{flex:1;min-height:0;position:relative;padding:6px;background:#d8dfed;overflow:hidden}
+    .fitViewport{position:absolute;inset:6px;overflow:hidden}
+    .fitStage{position:absolute;left:0;top:0;transform-origin:top left}
+    .questionShell{
+      width:1220px;height:840px;border-radius:30px;background:#d3dbea;padding:10px;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.18);
+      display:grid;grid-template-rows:1fr 66px;gap:8px;overflow:hidden;
+    }
+    .boardGrid{
+      width:100%;height:100%;display:grid;grid-template-columns:1fr 1fr;gap:12px;
+      grid-template-rows:388px 1fr 58px;
+      grid-template-areas:
+        "intro partb"
+        "parta partb"
+        ". controls";
+      align-items:stretch;
+      min-height:0;
+    }
+    .introPanel{grid-area:intro}
+    .partABox{grid-area:parta;margin-top:34px;height:calc(100% - 34px)}
+    .partBBox{grid-area:partb;margin-top:34px;margin-bottom:96px;height:calc(100% - 130px);align-self:start}
+    .introPanel,.partABox,.partBBox{
+      border-radius:26px;background:rgba(233,238,247,.7);padding:14px 16px;position:relative;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.18);
+      overflow:visible;
+    }
+    .questionTitleBox{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      background:rgba(244,247,252,.95);border-radius:18px;padding:10px 14px;margin-bottom:10px;
+    }
+    .questionTitleMain{font-size:15px;font-weight:1000;color:#2b6fb5}
+    .questionTitleSub{font-size:10px;font-weight:900;color:#64748b}
+    .questionTag{
+      border:2px solid #c6d8ef;border-radius:16px;padding:8px 14px;font-size:12px;font-weight:1000;color:#2b6fb5;background:#f4f8fd
+    }
+    .missionCard{
+      margin:2px 0 8px;padding:8px 12px;border-radius:18px;background:rgba(244,247,252,.95);
+      border:1px solid rgba(16,24,40,.10);box-shadow:0 6px 14px rgba(15,23,42,.05);
+    }
+    .missionTop{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .missionTitle{font-size:16px;font-weight:1000;color:#1e3a8a}
+    .petPlaceholder{
+      min-width:92px;padding:8px 10px;border-radius:16px;border:2px dashed #c6d8ef;background:#fff;
+      text-align:center;font-size:12px;font-weight:1000;color:#2b6fb5;line-height:1.1;
+    }
+    .petPlaceholder.unlocked{
+      border-style:solid;border-color:#86efac;background:#ecfdf3;color:#166534;
+      box-shadow:0 6px 14px rgba(22,163,74,.12);
+    }
+    .petPlaceholder small{display:block;margin-top:3px;font-size:10px;color:#64748b}
+    .petPlaceholder.unlocked small{color:#166534}
+    .missionBar{
+      margin-top:8px;height:12px;border-radius:999px;background:#e2e8f0;overflow:hidden;
+      box-shadow:inset 0 1px 2px rgba(15,23,42,.08);
+    }
+    .missionFill{
+      height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg,#60a5fa,#34d399);
+      transition:width .25s ease;
+    }
+    .missionBottom{
+      margin-top:6px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:nowrap;
+    }
+    .streakText{font-size:13px;font-weight:1000;color:#92400e}
+    .streakDots{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+    .streakDot{
+      width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+      background:#e2e8f0;border:2px solid #cbd5e1;font-size:14px;transition:transform .18s ease, background .18s ease, border-color .18s ease;
+    }
+    .streakDot.on{background:#fef3c7;border-color:#f59e0b;transform:translateY(-2px)}
+    .missionMeta{font-size:11px;font-weight:1000;color:#64748b}
+    .petReward{
+      display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+    }
+    .petRewardBox{
+      width:112px;height:112px;border-radius:20px;border:3px dashed #86efac;background:#ecfdf3;
+      display:flex;align-items:center;justify-content:center;flex-direction:column;
+      font-size:18px;font-weight:1000;color:#166534;
+    }
+    .petRewardBox span{font-size:42px;line-height:1}
+    .rewardPage{
+      width:1220px;height:840px;border-radius:30px;background:#d3dbea;padding:22px;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.18);
+      display:none;align-items:center;justify-content:center;
+    }
+    .rewardPage.show{display:flex}
+    .rewardStage{
+      width:min(100%,860px);min-height:620px;border-radius:30px;background:rgba(244,247,252,.96);
+      box-shadow:0 18px 40px rgba(15,23,42,.10);border:1px solid rgba(16,24,40,.08);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+      gap:16px;padding:28px 24px;
+    }
+    .rewardBadge{
+      padding:8px 16px;border-radius:999px;background:#ede9fe;border:1px solid #c4b5fd;
+      color:#6d28d9;font-size:16px;font-weight:1000;
+    }
+    .rewardTitle{
+      font-size:42px;font-weight:1000;color:#0f172a;line-height:1.05;
+    }
+    .rewardSub{
+      font-size:20px;font-weight:1000;color:#475569;max-width:640px;line-height:1.35;
+    }
+    .rewardPetStage{
+      width:min(100%,380px);min-height:300px;border-radius:28px;border:3px dashed #86efac;background:#ecfdf3;
+      box-shadow:0 10px 24px rgba(22,163,74,.12);
+      display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:20px;
+    }
+    .rewardPetEmoji{font-size:92px;line-height:1}
+    .rewardPetImg{
+      width:min(100%,260px);height:auto;display:block;
+      filter:drop-shadow(0 12px 20px rgba(15,23,42,.14));
+    }
+    .rewardPetName{font-size:34px;font-weight:1000;color:#166534;line-height:1.1}
+    .rewardPetHint{font-size:16px;font-weight:1000;color:#15803d;line-height:1.3}
+    .rewardSparkle{
+      font-size:26px;font-weight:1000;color:#d97706;
+      animation:rewardFloat 1.8s ease-in-out infinite;
+    }
+    @keyframes rewardFloat{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-6px)}
+    }
+    .problemText{font-size:18px;line-height:1.32;font-weight:1000;padding:8px 2px 0}
+    .problemText .lead{margin-bottom:10px}
+    .problemText .partLine{display:flex;gap:10px;margin-top:6px;align-items:flex-start}
+    .partTag{min-width:42px}
+    .partBlock{height:100%;display:flex;flex-direction:column}
+    .partHeader{font-size:24px;font-weight:1000;margin-bottom:10px}
+    .modelArea{margin-top:6px;display:flex;flex-direction:column;min-height:0}
+
+    .barModel{position:relative;width:min(100%,500px);height:164px;margin:8px auto 0;overflow:hidden}
+    .stackBar{position:absolute;left:0;right:0;top:58px;height:34px;border:2px solid var(--line);display:flex;background:#fff}
+    .stackBar .segA,.stackBar .segB,.remainBar .segSpent,.remainBar .segLeft{height:100%}
+    .segA{background:var(--barA)}
+    .segB{background:var(--barB)}
+    .braceTopWrap,.braceBottomWrap,.remainTopBrace,.remainBottomBrace{position:absolute;left:0;right:0;pointer-events:none}
+    .braceTopWrap{top:26px;height:30px}
+    .braceBottomWrap{top:92px;height:34px}
+    .braceTop,.braceBottom,.remainTopBrace .wholeBrace,.remainBottomLeft,.remainBottomRight{
+      position:absolute;height:28px;overflow:visible;
+    }
+    .braceTop svg,.braceBottom svg,.remainTopBrace .wholeBrace svg,.remainBottomLeft svg,.remainBottomRight svg{
+      width:100%;height:100%;display:block;
+    }
+    .braceTop path,.braceBottom path,.remainTopBrace .wholeBrace path,.remainBottomLeft path,.remainBottomRight path{
+      fill:none;stroke:var(--line);stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round;
+    }
+    .topBlank,.underQuestion,.remainTopBlank,.remainBottomBlank,.remainQuestion{
+      position:absolute;display:flex;align-items:center;justify-content:center;font-weight:1000;
+    }
+    .topBlank{top:0;transform:translateX(-50%)}
+    .underQuestion{left:50%;top:30px;transform:translateX(-50%);font-size:28px}
+
+    .blankInput{
+      width:86px;height:34px;border-radius:9px;border:2px solid var(--blankBorder);background:var(--blank);
+      font:inherit;font-size:16px;font-weight:1000;text-align:center;color:#13212f;outline:none;
+      padding:0 6px;
+    }
+    .blankInput.small{width:82px}
+    .blankInput.long{width:116px}
+    .blankInput.op{
+      width:34px;height:34px;border-radius:999px;padding:0;font-size:18px;text-transform:none;
+    }
+
+    .eqBox{
+      margin-top:18px;background:var(--eqBg);border-radius:14px;padding:12px 16px;
+      display:flex;align-items:center;justify-content:center;gap:10px;font-size:22px;font-weight:1000;flex-wrap:nowrap;
+    }
+    .moneyField{display:inline-flex;align-items:center;justify-content:center;gap:4px;}
+    .moneyField .dollar{font-size:20px;font-weight:1000;min-width:12px;text-align:center;}
+    .moneyLead{
+      display:inline-flex;align-items:center;justify-content:center;
+      font-size:26px;font-weight:1000;line-height:1;color:#0f172a;
+      min-width:16px;
+    }
+    .moneyInlineSentence{
+      display:inline-flex;align-items:center;gap:4px;vertical-align:middle;
+    }
+    .opBank{margin-top:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;position:relative;z-index:12;padding-bottom:4px;}
+    .opBankLabel{font-size:13px;font-weight:1000;color:var(--muted)}
+    .opChip{
+      width:36px;height:36px;border-radius:999px;border:2px solid rgba(16,24,40,.18);background:#fff;
+      display:inline-flex;align-items:center;justify-content:center;font-size:20px;font-weight:1000;cursor:pointer;user-select:none;
+      box-shadow:0 5px 12px rgba(15,23,42,.06);position:relative;z-index:13;
+    }
+    .opChip:active{transform:translateY(1px)}
+    .opSlot{
+      width:38px;height:38px;border-radius:999px;border:3px dashed rgba(16,24,40,.25);background:#fff;
+      display:inline-flex;align-items:center;justify-content:center;font-size:20px;font-weight:1000;color:#536071;
+      cursor:pointer;flex:0 0 auto;
+    }
+    .opSlot.filled{border-style:solid;color:var(--ink)}
+    .opSlot.over{outline:3px solid rgba(43,111,181,.2);outline-offset:2px}
+    .sentence{margin-top:14px;font-size:22px;font-weight:1000;line-height:1.38}
+
+    .remainArea{position:relative;height:346px;width:min(100%,560px);margin:0 auto;overflow:hidden}
+    .remainTopBrace{top:26px;height:30px}
+    .remainTopBlank{top:0;left:50%;transform:translateX(-50%)}
+    .remainTopBrace .wholeBrace{left:0;right:0;top:22px}
+    .remainBarWrap{position:absolute;left:0;right:0;top:82px;height:34px}
+    .remainBar{height:34px;border:2px solid var(--line);display:flex;background:#fff;position:relative}
+    .segSpent{background:var(--barC)}
+    .segLeft{background:var(--barD)}
+    .remainBottomBrace{top:116px;height:34px}
+    .remainBottomLeft,.remainBottomRight{top:0}
+    .remainBottomLabels{position:absolute;left:0;right:0;top:148px;height:36px}
+    .remainBottomBlank{transform:translateX(-50%)}
+    .remainQuestion{font-size:28px}
+
+    .labelName{display:none}
+    .labelName.top{top:80px}
+    .labelName.bottom{top:122px}
+
+    .feedback.good{display:block;background:var(--good);border:1px solid #b1d7be}
+    .feedback.bad{display:block;background:var(--bad);border:1px solid #efb8b8}
+
+    #workPanelBd{flex:1;min-height:0;padding:0;overflow:hidden;display:flex;flex-direction:column}
+    .workCard{flex:1;display:flex;min-height:0;flex-direction:column}
+    .workCanvasWrap{flex:1;min-height:0;padding:0}
+    #workCanvas{width:100%;height:100%;display:block;background:#fff;touch-action:none}
+    .workFeedbackFrame{
+      flex:0 0 170px;
+      min-height:170px;
+      border-top:1px solid rgba(16,24,40,.08);
+      background:rgba(244,247,252,.96);
+      padding:12px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .workFeedbackTitle{font-size:16px;font-weight:1000;color:#111827}
+    .workFeedbackBox{flex:1;min-height:0;display:none;overflow:auto;background:#fff;border:1px solid rgba(16,24,40,.10)}
+    #confettiCanvas{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:9999;}
+    .controlsFrame{grid-area:controls;margin-top:-92px;padding-top:0;display:flex;align-items:start;justify-content:stretch;min-height:0;align-self:start;position:relative;z-index:3;}
+    .controlsFrameInner{
+      width:100%;border-radius:22px;border:1px solid rgba(16,24,40,.10);background:rgba(244,247,252,.96);
+      box-shadow:0 8px 18px rgba(15,23,42,.06);padding:10px 14px;
+      display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;
+    }
+    .controlsFrameInner .btn{min-width:122px}
+    .partBBox .eqBox{margin-top:-28px !important;}
+    .partBBox .sentence{margin-top:10px;}
+    .feedback{
+      position:static;min-height:58px;width:100%;
+      margin:0;border-radius:16px;padding:10px 14px;font-size:14px;line-height:1.25;font-weight:1000;display:none;
+      white-space:pre-line;
+    }
+    .feedback.good,.feedback.bad{display:block}
+
+    .footer{
+      flex:0 0 auto;padding:8px 14px;border-top:1px solid rgba(16,24,40,.08);
+      display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:11px;font-weight:1000;color:var(--muted)
+    }
+
+    .hiddenXapi{display:none}
+
+    @media (max-width:1200px){
+      .main{grid-template-columns:minmax(0,2.18fr) minmax(260px,.72fr)}
+      .questionShell{width:1160px;height:790px}
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="title">
+      <h1>Two-Part Word Problem — Variation</h1>
+      <div class="sub">Original money-problem layout with working space on the right.</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="card leftCard">
+      <div class="leftBd">
+        <div class="fitViewport" id="fitViewport"><div class="fitStage" id="fitStage">
+          <div class="questionShell" id="questionShell">
+            <div class="boardGrid">
+              <div class="introPanel">
+                <div class="questionTitleBox">
+                  <div>
+                    <div class="questionTitleMain">Money Word Problem</div>
+                    <div class="questionTitleSub">Read both parts carefully.</div>
+                  </div>
+                  <div class="questionTag">2-part question</div>
+                </div>
+                <div class="missionCard">
+                  <div class="missionTop">
+                    <div class="missionTitle" id="missionTitle">Question 1 of 3</div>
+                                      </div>
+                  <div class="missionBar"><div class="missionFill" id="missionFill"></div></div>
+                  <div class="missionBottom">
+                    <div class="streakText" id="streakText">Progress streak: 0 of 3</div>
+                    <div class="streakDots">
+                      <div class="streakDot" id="streak1">⭐</div>
+                      <div class="streakDot" id="streak2">⭐</div>
+                      <div class="streakDot" id="streak3">⭐</div>
+                    </div>
+                    <div class="missionMeta" id="missionMeta">Finish each question to light a star.</div>
+                  </div>
+                </div>
+                <div class="problemText" id="problemText"></div>
+                <div class="opBank" id="opBank">
+                  <span class="opBankLabel">Click the operation sign:</span>
+                  <span class="opChip" data-op="+">+</span>
+                  <span class="opChip" data-op="−">−</span>
+                  <span class="opChip" data-op="×">×</span>
+                  <span class="opChip" data-op="÷">÷</span>
+                </div>
+              </div>
+
+              <div class="partABox">
+                <div class="partBlock">
+                  <div class="partHeader">(i)</div>
+                  <div class="modelArea">
+                    <div class="barModel" id="spentModel">
+                      <div class="topBlank" id="spentTopBlank1"><span class="moneyLead">$</span><input class="blankInput small" id="spentTop1" inputmode="decimal" placeholder="0.00" aria-label="Part i first top blank"></div>
+                      <div class="topBlank" id="spentTopBlank2"><span class="moneyLead">$</span><input class="blankInput small" id="spentTop2" inputmode="decimal" placeholder="0.00" aria-label="Part i second top blank"></div>
+
+                      <div class="braceTopWrap">
+                        <div class="braceTop" id="spentBrace1"></div>
+                        <div class="braceTop" id="spentBrace2"></div>
+                      </div>
+
+                      <div class="stackBar">
+                        <div class="segA" id="spentSeg1"></div>
+                        <div class="segB" id="spentSeg2"></div>
+                      </div>
+
+                      <div class="braceBottomWrap">
+                        <div class="braceBottom" id="spentBraceBottom"></div>
+                        <div class="underQuestion">?</div>
+                      </div>
+                    </div>
+
+                    <div class="eqBox">
+                      <span class="moneyField"><span class="dollar">$</span><input class="blankInput small" id="eqA1" inputmode="decimal" placeholder="0.00" aria-label="Part i equation first value"></span>
+                      <span class="opSlot" id="eqAopSlot" data-opslot="A">?</span>
+                      <span class="moneyField"><span class="dollar">$</span><input class="blankInput small" id="eqA2" inputmode="decimal" placeholder="0.00" aria-label="Part i equation second value"></span>
+                      <span>=</span>
+                      <span class="moneyField"><span class="dollar">$</span><input class="blankInput long" id="spentEqAns" inputmode="decimal" placeholder="0.00" aria-label="Part i equation answer"></span>
+                    </div>
+
+                    <div class="sentence">
+                      <span id="nameSentence1">Name</span> spent <span class="moneyInlineSentence"><span class="moneyLead">$</span><input class="blankInput long" id="spentSentenceAns" inputmode="decimal" placeholder="0.00" aria-label="Part i sentence answer"></span> altogether.
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="partBBox">
+                <div class="partBlock">
+                  <div class="partHeader">(ii)</div>
+                  <div class="modelArea">
+                    <div class="remainArea">
+                      <div class="remainTopBlank"><span class="moneyLead">$</span><input class="blankInput small" id="remainTopInput" inputmode="decimal" placeholder="0.00" aria-label="Part ii top blank"></div>
+                      <div class="remainTopBrace"><div class="wholeBrace"></div></div>
+
+
+                      <div class="remainBarWrap">
+                        <div class="remainBar">
+                          <div class="segSpent" id="remainSpent"></div>
+                          <div class="segLeft" id="remainLeft"></div>
+                        </div>
+                      </div>
+
+                      <div class="remainBottomBrace">
+                        <div class="remainBottomLeft" id="remainBottomLeft"></div>
+                        <div class="remainBottomRight" id="remainBottomRight"></div>
+                      </div>
+                      <div class="remainBottomLabels">
+                        <div class="remainBottomBlank" id="remainBottomBlankLeft"><span class="moneyLead">$</span><input class="blankInput small" id="remainSpentInput" inputmode="decimal" placeholder="0.00" aria-label="Part ii bottom left blank"></div>
+                        <div class="remainBottomBlank remainQuestion" id="remainQuestionRight">?</div>
+                      </div>
+                    </div>
+
+                    <div class="eqBox" style="margin-top:-8px;">
+                      <span class="moneyField"><span class="dollar">$</span><input class="blankInput small" id="eqB1" inputmode="decimal" placeholder="0.00" aria-label="Part ii equation first value"></span>
+                      <span class="opSlot" id="eqBopSlot" data-opslot="B">?</span>
+                      <span class="moneyField"><span class="dollar">$</span><input class="blankInput small" id="eqB2" inputmode="decimal" placeholder="0.00" aria-label="Part ii equation second value"></span>
+                      <span>=</span>
+                      <span class="moneyField"><span class="dollar">$</span><input class="blankInput long" id="leftEqAns" inputmode="decimal" placeholder="0.00" aria-label="Part ii equation answer"></span>
+                    </div>
+
+                    <div class="sentence">
+                      <span id="nameSentence2">Name</span> had <span class="moneyInlineSentence"><span class="moneyLead">$</span><input class="blankInput long" id="leftSentenceAns" inputmode="decimal" placeholder="0.00" aria-label="Part ii sentence answer"></span> left.
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+              <div class="controlsFrame">
+                <div class="controlsFrameInner">
+                  <button class="btn primary" id="btnUnlock" type="button">🔊 Unlock Audio</button>
+                  <button class="btn" id="btnNew" type="button">Restart Set</button>
+                  <button class="btn checkYellow" id="btnCheck" type="button">Check Answers</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="rewardPage" id="rewardPage" hidden>
+            <div class="rewardStage">
+              <div class="rewardBadge">⭐ Mission complete</div>
+              <div class="rewardTitle">Pet 2 unlocked!</div>
+              <div class="rewardSub">You finished all 3 questions. Here is your new pet page.</div>
+              <div class="rewardPetStage">
+                <div class="rewardSparkle">✨ ✨ ✨</div>
+                <img class="rewardPetImg" src="https://raw.githubusercontent.com/limkimsze-maker/P3_More_Word_Problems_Monster_Quest_Pet_2/5484f6c8fa36831ba0103eb91d98453e3f952fc6/2%20pet.png" alt="Pet 2">
+                <div class="rewardPetName">Pet 2</div>
+                <div class="rewardPetHint">It hatched! So cute!</div>
+              </div>
+              <button class="btn primary" id="btnRewardPlayAgain" type="button">Play Again</button>
+            </div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+    <div class="card" id="toolsCard">
+      <div class="cardHd">
+        <div class="h">Working Space</div>
+        <button class="btn" id="btnWorkClearTop" type="button">Clear Working</button>
+      </div>
+      <div id="workPanelBd">
+        <div class="workCard">
+          <div class="workCanvasWrap">
+            <canvas id="workCanvas"></canvas>
+          </div>
+          <div class="workFeedbackFrame">
+            <div class="workFeedbackTitle">Feedback</div>
+            <div class="feedback workFeedbackBox" id="feedback"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div>Designed by Lim Kim Sze © 2026</div>
+    <div>Original classroom layout with right-side working space</div>
+  </div>
+
+  <div class="hiddenXapi">
+    <input id="score-input" type="text" value="0">
+    <input id="feedback-input" type="text" value="">
+  </div>
+</div>
+
+<canvas id="confettiCanvas"></canvas>
+<script>
+(function(){
+  'use strict';
+
+  const items = [
+    'basketball','soccer ball','storybook','water bottle','school bag','pencil case','toy robot','jigsaw puzzle',
+    'drawing set','badminton racket','science kit','storybook set','colour pencils','board game','toy car'
+  ];
+  const people = [
+    {name:'Aiden', pronoun:'He'},
+    {name:'Mia', pronoun:'She'},
+    {name:'Grace', pronoun:'She'},
+    {name:'Daniel', pronoun:'He'},
+    {name:'Amir', pronoun:'He'},
+    {name:'Siti', pronoun:'She'},
+    {name:'Jayden', pronoun:'He'},
+    {name:'Sarah', pronoun:'She'},
+    {name:'Ethan', pronoun:'He'},
+    {name:'Hana', pronoun:'She'},
+    {name:'Zavier', pronoun:'He'}
+  ];
+
+  const els = {
+    problemText: document.getElementById('problemText'),
+    spentTop1: document.getElementById('spentTop1'),
+    spentTop2: document.getElementById('spentTop2'),
+    eqA1: document.getElementById('eqA1'),
+    eqA2: document.getElementById('eqA2'),
+    eqAopSlot: document.getElementById('eqAopSlot'),
+    spentEqAns: document.getElementById('spentEqAns'),
+    spentSentenceAns: document.getElementById('spentSentenceAns'),
+    remainTopInput: document.getElementById('remainTopInput'),
+    remainSpentInput: document.getElementById('remainSpentInput'),
+    eqB1: document.getElementById('eqB1'),
+    eqB2: document.getElementById('eqB2'),
+    eqBopSlot: document.getElementById('eqBopSlot'),
+    leftEqAns: document.getElementById('leftEqAns'),
+    leftSentenceAns: document.getElementById('leftSentenceAns'),
+    nameSentence1: document.getElementById('nameSentence1'),
+    nameSentence2: document.getElementById('nameSentence2'),
+    missionTitle: document.getElementById('missionTitle'),
+    missionFill: document.getElementById('missionFill'),
+    missionMeta: document.getElementById('missionMeta'),
+    streakText: document.getElementById('streakText'),
+    petPlaceholder: document.getElementById('petPlaceholder'),
+    streakDots: [1,2,3].map(n=>document.getElementById('streak'+n)),
+        feedback: document.getElementById('feedback'),
+    spentSeg1: document.getElementById('spentSeg1'),
+    spentSeg2: document.getElementById('spentSeg2'),
+    spentBrace1: document.getElementById('spentBrace1'),
+    spentBrace2: document.getElementById('spentBrace2'),
+    spentBraceBottom: document.getElementById('spentBraceBottom'),
+    spentTopBlank1: document.getElementById('spentTopBlank1'),
+    spentTopBlank2: document.getElementById('spentTopBlank2'),
+    remainSpent: document.getElementById('remainSpent'),
+    remainLeft: document.getElementById('remainLeft'),
+    remainBottomLeft: document.getElementById('remainBottomLeft'),
+    remainBottomRight: document.getElementById('remainBottomRight'),
+    remainBottomBlankLeft: document.getElementById('remainBottomBlankLeft'),
+    remainQuestionRight: document.getElementById('remainQuestionRight'),
+    fitViewport: document.getElementById('fitViewport'),
+    fitStage: document.getElementById('fitStage'),
+    questionShell: document.getElementById('questionShell'),
+    btnNew: document.getElementById('btnNew'),
+    btnCheck: document.getElementById('btnCheck'),
+    btnUnlock: document.getElementById('btnUnlock'),
+    btnRewardPlayAgain: document.getElementById('btnRewardPlayAgain'),
+    rewardPage: document.getElementById('rewardPage'),
+    scoreInput: document.getElementById('score-input'),
+    feedbackInput: document.getElementById('feedback-input')
+  };
+
+  const sounds = {
+    ok: new Audio('./correct.mp3'),
+    bad: new Audio('./wrong.mp3')
+  };
+  Object.values(sounds).forEach(a=>{ a.preload='auto'; a.playsInline=true; });
+  let audioUnlocked = false;
+  async function unlockAudio(){
+    try{
+      for(const a of Object.values(sounds)){
+        a.muted = true;
+        try{ await a.play(); }catch(e){}
+        a.pause(); a.currentTime = 0; a.muted = false;
+      }
+      audioUnlocked = true;
+      els.btnUnlock.textContent = '🔊 Audio Unlocked';
+    }catch(e){}
+  }
+  function play(name){
+    const a = sounds[name]; if(!a) return;
+    try{ a.pause(); a.currentTime=0; a.play().catch(()=>{}); }catch(e){}
+  }
+  els.btnUnlock.addEventListener('click', unlockAudio);
+  window.addEventListener('pointerdown', ()=>{ if(!audioUnlocked) unlockAudio(); }, {once:true, passive:true});
+
+  const TOTAL_QUESTIONS = 3;
+  const state = { data:null, solvedCount:0, mode:'solve' };
+
+  function showSolvePage(){
+    els.questionShell.style.display = '';
+    els.rewardPage.hidden = true;
+    els.rewardPage.classList.remove('show');
+    els.btnNew.disabled = false;
+    els.btnCheck.disabled = false;
+  }
+  function showRewardPage(){
+    els.questionShell.style.display = 'none';
+    els.rewardPage.hidden = false;
+    els.rewardPage.classList.add('show');
+    els.btnNew.disabled = true;
+    els.btnCheck.disabled = true;
+    requestAnimationFrame(fitToViewport);
+  }
+
+  function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+  function shuffle(arr){ return arr.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]); }
+  function money(cents){ return (cents/100).toFixed(2); }
+  function parseMoney(v){
+    const s = String(v||'').trim().replace(/\$/g,'');
+    if(!s) return NaN;
+    if(!/^\d+(?:\.\d{2})?$/.test(s)) return NaN;
+    return Math.round(parseFloat(s)*100);
+  }
+  function eqMoney(id, expected){
+    return parseMoney(els[id].value) === expected;
+  }
+  const opState = { A:'', B:'' };
+  function eqOp(slotKey, op){
+    return opState[slotKey] === op;
+  }
+  function clearOpSlot(key){
+    opState[key] = '';
+    const el = key==='A' ? els.eqAopSlot : els.eqBopSlot;
+    el.textContent = '?';
+    el.classList.remove('filled');
+  }
+  function setOpSlot(key, symbol){
+    opState[key] = symbol;
+    const el = key==='A' ? els.eqAopSlot : els.eqBopSlot;
+    el.textContent = symbol;
+    el.classList.add('filled');
+  }
+  function resetInputs(){
+    [
+      'spentTop1','spentTop2','eqA1','eqA2','spentEqAns','spentSentenceAns',
+      'remainTopInput','remainSpentInput','eqB1','eqB2','leftEqAns','leftSentenceAns'
+    ].forEach(id=>els[id].value='');
+    clearOpSlot('A');
+    clearOpSlot('B');
+    els.feedback.className = 'feedback';
+    els.feedback.textContent = '';
+    els.scoreInput.value = '0';
+    els.feedbackInput.value = '';
+  }
+
+  function updateMissionUI(){
+    const progress = Math.max(0, Math.min(state.solvedCount, TOTAL_QUESTIONS));
+    const currentNumber = state.mode === 'done' ? TOTAL_QUESTIONS : Math.min(progress + 1, TOTAL_QUESTIONS);
+    els.missionTitle.textContent = state.mode === 'done'
+      ? `Mission complete! ${TOTAL_QUESTIONS} of ${TOTAL_QUESTIONS}`
+      : `Question ${currentNumber} of ${TOTAL_QUESTIONS}`;
+    els.missionFill.style.width = `${(progress / TOTAL_QUESTIONS) * 100}%`;
+    els.streakText.textContent = `Progress streak: ${progress} of ${TOTAL_QUESTIONS}`;
+    els.streakDots.forEach((dot, idx)=>dot.classList.toggle('on', idx < progress));
+    if(state.mode === 'done'){
+      els.missionMeta.textContent = 'You finished the full 3-question mission.';
+
+    }else{
+      const remain = Math.max(0, TOTAL_QUESTIONS - progress);
+      els.missionMeta.textContent = remain ? `${remain} question${remain===1?'':'s'} to go in this mission.` : 'Mission complete!';
+
+    }
+  }
+
+  function startNewQuestion(){
+    showSolvePage();
+    state.data = makeVariation();
+    state.mode = 'solve';
+    render();
+    els.btnCheck.textContent = 'Check Answers';
+    updateMissionUI();
+  }
+
+  function braceTopSVG(){
+    return `<svg viewBox="0 0 100 24" preserveAspectRatio="none"><path d="M1 20 C1 8 4 4 12 4 L45 4 C47 4 48.6 4 50 1 C51.4 4 53 4 55 4 L88 4 C96 4 99 8 99 20"/></svg>`;
+  }
+  function braceBottomSVG(){
+    return `<svg viewBox="0 0 100 24" preserveAspectRatio="none"><path d="M1 4 C1 16 4 20 12 20 L45 20 C47 20 48.6 20 50 23 C51.4 20 53 20 55 20 L88 20 C96 20 99 16 99 4"/></svg>`;
+  }
+  function setBrace(el,left,width,type){
+    el.style.left = left + '%';
+    el.style.width = width + '%';
+    el.style.top = '0px';
+    el.innerHTML = type==='bottom' ? braceBottomSVG() : braceTopSVG();
+  }
+
+  function makeVariation(){
+    const person = pick(people);
+    const shuffled = shuffle(items.slice());
+    const item1 = shuffled[0], item2 = shuffled[1];
+    let p1, p2, start, spent, left;
+
+    function randCents(minC, maxC){
+      const v = Math.floor(Math.random() * (maxC - minC + 1)) + minC;
+      return Math.round(v / 5) * 5;
+    }
+
+    while(true){
+      // Make the 2 prices clearly different so pupils can match them to the model more easily.
+      const low = randCents(700, 1100);   // $7.00 to about $11.00
+      const high = randCents(1300, 1950); // $13.00 to about $19.50
+      if(Math.abs(high - low) < 250) continue; // at least $2.50 apart
+
+      if(Math.random() < 0.5){
+        p1 = low; p2 = high;
+      }else{
+        p1 = high; p2 = low;
+      }
+
+      spent = p1 + p2;
+
+      // Make the part-whole model show one clearly longer part and one clearly shorter part.
+      // We keep the spent part longer and the left part shorter.
+      const minStart = Math.ceil((spent / 0.78) / 100) * 100; // spent about 78% at most
+      const maxStart = Math.floor((spent / 0.62) / 100) * 100; // spent about 62% at least
+      if(minStart > maxStart) continue;
+
+      const startChoices = [];
+      for(let d=minStart/100; d<=maxStart/100; d++) startChoices.push(d*100);
+      if(!startChoices.length) continue;
+
+      start = pick(startChoices);
+      left = start - spent;
+
+      if(left >= 400 && left <= 1800) break; // leave a sensible smaller amount
+    }
+
+    return { name:person.name, pronoun:person.pronoun, item1, item2, price1:p1, price2:p2, start, spent, left };
+  }
+
+  function render(){
+    const s = state.data;
+    els.problemText.innerHTML = `
+      <div class="lead"><b>(a)</b>&nbsp;&nbsp;&nbsp;When ${s.name} had $${money(s.start)}.</div>
+      <div>${s.pronoun} bought a ${s.item1} for $${money(s.price1)} and a ${s.item2} for $${money(s.price2)}.</div>
+      <div class="partLine"><span class="partTag">(i)</span><span>How much did ${s.name} spend altogether?</span></div>
+      <div class="partLine"><span class="partTag">(ii)</span><span>How much money did ${s.name} have left?</span></div>
+    `;
+    els.nameSentence1.textContent = s.name;
+    els.nameSentence2.textContent = s.name;
+
+    const p1 = (s.price1 / s.spent) * 100;
+    const p2 = 100 - p1;
+    els.spentSeg1.style.width = p1 + '%';
+    els.spentSeg2.style.width = p2 + '%';
+    setBrace(els.spentBrace1, 0, p1, 'top');
+    setBrace(els.spentBrace2, p1, p2, 'top');
+    setBrace(els.spentBraceBottom, 0, 100, 'bottom');
+    els.spentTopBlank1.style.left = (p1/2) + '%';
+    els.spentTopBlank2.style.left = (p1 + p2/2) + '%';
+
+    document.querySelector('.remainTopBrace .wholeBrace').innerHTML = braceTopSVG();
+
+    const spentPct = (s.spent / s.start) * 100;
+    const leftPct = 100 - spentPct;
+    els.remainSpent.style.width = spentPct + '%';
+    els.remainLeft.style.width = leftPct + '%';
+    setBrace(els.remainBottomLeft, 0, spentPct, 'bottom');
+    setBrace(els.remainBottomRight, spentPct, leftPct, 'bottom');
+    els.remainBottomBlankLeft.style.left = (spentPct/2) + '%';
+    els.remainQuestionRight.style.left = (spentPct + leftPct/2) + '%';
+
+    resetInputs();
+    fitToViewport();
+    updateMissionUI();
+  }
+
+  function fitToViewport(){
+    const vp = els.fitViewport;
+    const stage = els.fitStage;
+    const shell = (!els.rewardPage.hidden && els.rewardPage.classList.contains('show')) ? els.rewardPage : els.questionShell;
+    if(!vp || !stage || !shell) return;
+    const vw = vp.clientWidth;
+    const vh = vp.clientHeight;
+    const sw = shell.offsetWidth;
+    const sh = shell.offsetHeight;
+    const scale = Math.min(vw/sw, vh/sh);
+    stage.style.transform = `scale(${scale})`;
+    stage.style.left = Math.max(0, (vw - sw*scale)/2) + 'px';
+    stage.style.top = Math.max(0, (vh - sh*scale)/2) + 'px';
+  }
+
+
+  /* Confetti */
+  const confetti = {
+    canvas: null,
+    ctx: null,
+    w: 0,
+    h: 0,
+    parts: [],
+    until: 0,
+    raf: 0
+  };
+  function initConfetti(){
+    confetti.canvas = document.getElementById('confettiCanvas');
+    if(confetti.canvas && !confetti.ctx){
+      confetti.ctx = confetti.canvas.getContext('2d');
+    }
+  }
+  initConfetti();
+  function resizeConfetti(){
+    initConfetti();
+    if(!confetti.canvas || !confetti.ctx) return;
+    const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+    confetti.w = Math.floor(window.innerWidth * dpr);
+    confetti.h = Math.floor(window.innerHeight * dpr);
+    confetti.canvas.width = confetti.w;
+    confetti.canvas.height = confetti.h;
+    confetti.canvas.style.width = '100vw';
+    confetti.canvas.style.height = '100vh';
+  }
+  function fireConfetti(){
+    initConfetti();
+    if(!confetti.canvas || !confetti.ctx) return;
+    resizeConfetti();
+    const now = performance.now();
+    confetti.until = now + 1600;
+    for(let i=0;i<160;i++){
+      const size = 6 + Math.random()*8;
+      confetti.parts.push({
+        x: confetti.w * (0.12 + Math.random()*0.76),
+        y: confetti.h * (0.02 + Math.random()*0.16),
+        vx: (Math.random()*2 - 1) * 6,
+        vy: -2 - Math.random()*5,
+        g: 0.18 + Math.random()*0.2,
+        r: size,
+        rot: Math.random()*Math.PI,
+        vr: (Math.random()*2 - 1) * 0.2,
+        life: 0
+      });
+    }
+    if(confetti.raf) return;
+    const step = (t)=>{
+      const ctx = confetti.ctx;
+      ctx.clearRect(0,0,confetti.w,confetti.h);
+      confetti.parts = confetti.parts.filter(p => p.y < confetti.h + 200 && p.life < 260);
+      for(const p of confetti.parts){
+        p.vy += p.g;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.rot += p.vr;
+        p.life += 1;
+        ctx.save();
+        ctx.translate(p.x,p.y);
+        ctx.rotate(p.rot);
+        const hue = (p.life*7 + (p.x+p.y)*0.002) % 360;
+        ctx.fillStyle = `hsl(${hue} 95% 60%)`;
+        ctx.fillRect(-p.r/2, -p.r/4, p.r, p.r/2);
+        ctx.restore();
+      }
+      if(t < confetti.until || confetti.parts.length){
+        confetti.raf = requestAnimationFrame(step);
+      }else{
+        cancelAnimationFrame(confetti.raf);
+        confetti.raf = 0;
+        ctx.clearRect(0,0,confetti.w,confetti.h);
+      }
+    };
+    confetti.raf = requestAnimationFrame(step);
+  }
+
+  function showFeedback(content, ok, asHtml=false){
+    els.feedback.className = 'feedback ' + (ok ? 'good' : 'bad');
+    if(asHtml) els.feedback.innerHTML = content;
+    else els.feedback.textContent = content;
+    els.scoreInput.value = ok ? '1' : '0';
+    els.feedbackInput.value = ok ? 'Success' : (typeof content === 'string' ? content.replace(/<[^>]*>/g, ' ') : '');
+    requestAnimationFrame(fitToViewport);
+  }
+
+  function check(){
+    const s = state.data;
+
+    if(state.mode === 'advance'){
+      startNewQuestion();
+      return;
+    }
+    if(state.mode === 'done'){
+      state.solvedCount = 0;
+      startNewQuestion();
+      return;
+    }
+
+    const addCommutes =
+      (eqMoney('eqA1', s.price1) && eqMoney('eqA2', s.price2)) ||
+      (eqMoney('eqA1', s.price2) && eqMoney('eqA2', s.price1));
+
+    const checks = [
+      eqMoney('spentTop1', s.price1),
+      eqMoney('spentTop2', s.price2),
+      addCommutes,
+      eqOp('A', '+'),
+      eqMoney('spentEqAns', s.spent),
+      eqMoney('spentSentenceAns', s.spent),
+      eqMoney('remainTopInput', s.start),
+      eqMoney('remainSpentInput', s.spent),
+      eqMoney('eqB1', s.start),
+      eqOp('B', '−'),
+      eqMoney('eqB2', s.spent),
+      eqMoney('leftEqAns', s.left),
+      eqMoney('leftSentenceAns', s.left)
+    ];
+    const ok = checks.every(Boolean);
+
+    if(ok){
+      if(audioUnlocked) play('ok');
+      fireConfetti();
+      state.solvedCount += 1;
+
+      if(state.solvedCount >= TOTAL_QUESTIONS){
+        state.mode = 'done';
+        showFeedback(`Well done! ${s.name} spent $${money(s.spent)} altogether. ${s.name} had $${money(s.left)} left.`, true);
+        updateMissionUI();
+        showRewardPage();
+      }else{
+        state.mode = 'advance';
+        showFeedback(`Well done! ${s.name} spent $${money(s.spent)} altogether. ${s.name} had $${money(s.left)} left. Press the same button for Question ${state.solvedCount + 1}.`, true);
+        els.btnCheck.textContent = 'Next Question';
+      }
+      updateMissionUI();
+    }else{
+      if(audioUnlocked) play('bad');
+      showFeedback('Some blanks are still not correct yet. Check each blank in the bar models, equations and sentences.', false);
+      els.btnCheck.textContent = 'Check Answers';
+    }
+  }
+
+  function bindOpSlot(el, key){
+    el.addEventListener('click', ()=>clearOpSlot(key));
+  }
+  document.querySelectorAll('.opChip').forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      const op = chip.dataset.op;
+      if(!opState.A) setOpSlot('A', op);
+      else if(!opState.B) setOpSlot('B', op);
+      else setOpSlot('B', op);
+    });
+  });
+  bindOpSlot(els.eqAopSlot, 'A');
+  bindOpSlot(els.eqBopSlot, 'B');
+
+  els.btnNew.addEventListener('click', ()=>{ state.solvedCount = 0; startNewQuestion(); });
+  els.btnCheck.addEventListener('click', check);
+  els.btnRewardPlayAgain.addEventListener('click', ()=>{ state.solvedCount = 0; startNewQuestion(); });
+  window.addEventListener('resize', ()=>{ fitToViewport(); resizeConfetti(); });
+  window.addEventListener('load', ()=>{ fitToViewport(); resizeConfetti(); });
+  if(window.ResizeObserver){ new ResizeObserver(fitToViewport).observe(document.querySelector('.leftBd')); }
+
+  /* Working canvas */
+  const canvas = document.getElementById('workCanvas');
+  const ctx = canvas.getContext('2d');
+  let drawing = false, last = null;
+  function resizeCanvas(){
+    const rect = canvas.getBoundingClientRect();
+    const dpr = Math.max(1, Math.min(2, window.devicePixelRatio||1));
+    const snapshot = document.createElement('canvas');
+    snapshot.width = canvas.width || 1;
+    snapshot.height = canvas.height || 1;
+    const sctx = snapshot.getContext('2d');
+    if(canvas.width && canvas.height) sctx.drawImage(canvas,0,0);
+    canvas.width = Math.max(1, Math.round(rect.width*dpr));
+    canvas.height = Math.max(1, Math.round(rect.height*dpr));
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    ctx.lineCap='round'; ctx.lineJoin='round'; ctx.lineWidth=4; ctx.strokeStyle='#0f172a';
+    ctx.clearRect(0,0,rect.width,rect.height);
+    if(snapshot.width>1 && snapshot.height>1){
+      ctx.drawImage(snapshot,0,0,rect.width,rect.height);
+    }
+  }
+  function point(e){
+    const r = canvas.getBoundingClientRect();
+    if(e.touches && e.touches[0]) return {x:e.touches[0].clientX-r.left, y:e.touches[0].clientY-r.top};
+    return {x:e.clientX-r.left, y:e.clientY-r.top};
+  }
+  function startDraw(e){ drawing=true; last=point(e); e.preventDefault(); }
+  function moveDraw(e){ if(!drawing) return; const p=point(e); ctx.beginPath(); ctx.moveTo(last.x,last.y); ctx.lineTo(p.x,p.y); ctx.stroke(); last=p; e.preventDefault(); }
+  function endDraw(){ drawing=false; last=null; }
+  canvas.addEventListener('mousedown', startDraw);
+  canvas.addEventListener('mousemove', moveDraw);
+  window.addEventListener('mouseup', endDraw);
+  canvas.addEventListener('touchstart', startDraw, {passive:false});
+  canvas.addEventListener('touchmove', moveDraw, {passive:false});
+  window.addEventListener('touchend', endDraw, {passive:false});
+  document.getElementById('btnWorkClearTop').addEventListener('click', ()=>{
+    const r = canvas.getBoundingClientRect();
+    ctx.clearRect(0,0,r.width,r.height);
+  });
+  window.addEventListener('resize', resizeCanvas);
+  setTimeout(resizeCanvas, 50);
+
+  startNewQuestion();
+})();
+</script>
+</body>
+</html>
