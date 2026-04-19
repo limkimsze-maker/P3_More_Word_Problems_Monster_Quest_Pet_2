@@ -611,7 +611,8 @@
 
   const sounds = {
     ok: new Audio('./correct.mp3'),
-    bad: new Audio('./wrong.mp3')
+    bad: new Audio('./wrong.mp3'),
+    tada: new Audio('./tada.mp3')
   };
   Object.values(sounds).forEach(a=>{ a.preload='auto'; a.playsInline=true; });
   let audioUnlocked = false;
@@ -649,6 +650,7 @@
     els.rewardPage.classList.add('show');
     els.btnNew.disabled = true;
     els.btnCheck.disabled = true;
+    if(audioUnlocked) play('tada');
     requestAnimationFrame(fitToViewport);
   }
 
