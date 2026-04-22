@@ -497,7 +497,7 @@
                 <div class="rewardSparkle">✨ ✨ ✨</div>
                 <img class="rewardPetImg" src="https://raw.githubusercontent.com/limkimsze-maker/P3_More_Word_Problems_Monster_Quest_Pet_2/5484f6c8fa36831ba0103eb91d98453e3f952fc6/2%20pet.png" alt="Pet 2">
                 </div>
-              <button class="btn primary" id="btnRewardPlayAgain" type="button">Play Again</button>
+              <button class="btn primary" id="btnRewardPlayAgain" type="button">Continue to Stage Map</button>
             </div>
           </div>
         </div></div>
@@ -632,6 +632,46 @@
   els.btnUnlock.addEventListener('click', unlockAudio);
   window.addEventListener('pointerdown', ()=>{ if(!audioUnlocked) unlockAudio(); }, {once:true, passive:true});
 
+  let stageCompleteSent = false;
+  let stageCompleteTimer = null;
+  function signalStageComplete(stageNumber){
+    if(stageCompleteSent) return;
+    stageCompleteSent = true;
+    try {
+      const key = 'monsterQuest_highestCompleted';
+      const current = Number(localStorage.getItem(key) || 0);
+      if (stageNumber > current) localStorage.setItem(key, String(stageNumber));
+      localStorage.setItem('monsterQuest_justUnlocked', String(Math.min(8, stageNumber + 1)));
+    } catch (e) {}
+
+    try {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({
+          type: 'monster-quest-stage-complete',
+          stage: stageNumber,
+          nextStage: Math.min(8, stageNumber + 1)
+        }, '*');
+        return;
+      }
+    } catch (e) {}
+
+    try {
+      const hubCandidates = [
+        './monster-quest-stage-hub-return-to-map.html?completed=' + stageNumber,
+        './monster-quest-stage-hub.html?completed=' + stageNumber,
+        '../monster-quest-stage-hub-return-to-map.html?completed=' + stageNumber,
+        '../monster-quest-stage-hub.html?completed=' + stageNumber
+      ];
+      window.location.href = hubCandidates[0];
+    } catch (e) {}
+  }
+
+  function queueStageComplete(stageNumber, delayMs){
+    if(stageCompleteSent) return;
+    clearTimeout(stageCompleteTimer);
+    stageCompleteTimer = setTimeout(()=>signalStageComplete(stageNumber), Math.max(0, delayMs || 0));
+  }
+
   const TOTAL_QUESTIONS = 3;
   const state = { data:null, solvedCount:0, mode:'solve' };
 
@@ -649,6 +689,7 @@
     els.btnNew.disabled = true;
     els.btnCheck.disabled = true;
     if(audioUnlocked) play('tada');
+    queueStageComplete(2, 1800);
     requestAnimationFrame(fitToViewport);
   }
 
@@ -713,6 +754,8 @@
   }
 
   function startNewQuestion(){
+    clearTimeout(stageCompleteTimer);
+    stageCompleteSent = false;
     showSolvePage();
     state.data = makeVariation();
     state.mode = 'solve';
@@ -991,7 +1034,7 @@
 
   els.btnNew.addEventListener('click', ()=>{ state.solvedCount = 0; startNewQuestion(); });
   els.btnCheck.addEventListener('click', check);
-  els.btnRewardPlayAgain.addEventListener('click', ()=>{ state.solvedCount = 0; startNewQuestion(); });
+  els.btnRewardPlayAgain.addEventListener('click', ()=>{ signalStageComplete(2); });
   window.addEventListener('resize', ()=>{ fitToViewport(); resizeConfetti(); });
   window.addEventListener('load', ()=>{ fitToViewport(); resizeConfetti(); });
   if(window.ResizeObserver){ new ResizeObserver(fitToViewport).observe(document.querySelector('.leftBd')); }
