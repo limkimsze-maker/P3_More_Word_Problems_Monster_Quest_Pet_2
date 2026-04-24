@@ -380,34 +380,76 @@
   </style>
 
   <script>
-  /* Reliable Monster Quest return helper: forces the TOP page back to the main map. */
+  /* Reliable Monster Quest return helper: uses a fresh query URL, not only a hash. */
   (function(){
     const MONSTER_QUEST_MAIN_URL = 'https://limkimsze-maker.github.io/P3_More_Word_Problems_Monster_Quest_Main_Page/';
-    window.__returnToMonsterQuestMain = function(stageNumber, reason){
+    function buildReturnUrl(stageNumber, reason){
       const stage = Number(stageNumber || 0) || '';
-      const stamp = Date.now();
-      const hash = '#stage' + stage + '-return-' + (reason || 'manual') + '-' + stamp;
-      const target = MONSTER_QUEST_MAIN_URL + hash;
+      const qs = new URLSearchParams({
+        mq_return: 'stage' + stage,
+        reason: reason || 'manual',
+        ts: String(Date.now())
+      });
+      return MONSTER_QUEST_MAIN_URL + '?' + qs.toString();
+    }
+
+    window.__returnToMonsterQuestMain = function(stageNumber, reason){
+      const target = buildReturnUrl(stageNumber, reason);
+      const btn = document.querySelector('.back-main-btn');
+      if(btn){
+        btn.setAttribute('href', target);
+        btn.setAttribute('target', '_top');
+      }
+
       try{
         if(window.top && window.top !== window){
-          window.top.location.href = target;
+          window.top.location.assign(target);
         }else{
-          window.location.href = target;
+          window.location.assign(target);
         }
+        return false;
       }catch(e){
-        window.location.href = target;
+        try{
+          window.open(target, '_top');
+          return false;
+        }catch(e2){
+          window.location.href = target;
+          return false;
+        }
       }
-      return false;
     };
+
+    function prepareBackLink(evt){
+      const btn = evt.target && evt.target.closest ? evt.target.closest('.back-main-btn') : null;
+      if(!btn) return;
+      const stage = btn.getAttribute('data-stage-return') || '2';
+      const target = buildReturnUrl(stage, 'manual');
+      btn.setAttribute('href', target);
+      btn.setAttribute('target', '_top');
+    }
+
+    document.addEventListener('pointerdown', prepareBackLink, true);
+    document.addEventListener('touchstart', prepareBackLink, true);
+    document.addEventListener('click', function(evt){
+      const btn = evt.target && evt.target.closest ? evt.target.closest('.back-main-btn') : null;
+      if(!btn) return;
+      prepareBackLink(evt);
+      try{
+        evt.preventDefault();
+        evt.stopPropagation();
+        evt.stopImmediatePropagation();
+      }catch(e){}
+      return window.__returnToMonsterQuestMain(btn.getAttribute('data-stage-return') || '2', 'manual');
+    }, true);
   })();
   </script>
 
 </head>
 <body>
 <a class="back-main-btn"
-   href="https://limkimsze-maker.github.io/P3_More_Word_Problems_Monster_Quest_Main_Page/#stage2-return-manual"
+   href="https://limkimsze-maker.github.io/P3_More_Word_Problems_Monster_Quest_Main_Page/?mq_return=stage2"
    target="_top"
-   onclick="return window.__returnToMonsterQuestMain ? window.__returnToMonsterQuestMain(2, 'manual') : true;">
+   data-stage-return="2">
   Back to Main Page
 </a>
 
@@ -718,7 +760,7 @@
     if (window.__returnToMonsterQuestMain) {
       window.__returnToMonsterQuestMain(stageNumber, 'complete');
     } else {
-      window.location.href = 'https://limkimsze-maker.github.io/P3_More_Word_Problems_Monster_Quest_Main_Page/#stage' + stageNumber + '-complete-' + Date.now();
+      window.location.href = 'https://limkimsze-maker.github.io/P3_More_Word_Problems_Monster_Quest_Main_Page/?mq_return=stage' + stageNumber + '&reason=complete&ts=' + Date.now();
     }
   }
 
