@@ -380,51 +380,66 @@
   </style>
 
   <script>
-  /* Reliable Monster Quest return helper: uses a fresh query URL, not only a hash. */
+  /* Monster Quest Destroy-and-Reload Return Fix
+     - Manual Back: tells the main hub to close/destroy the iframe.
+     - Fallback: if opened outside the hub, go to the main page with a fresh URL.
+     - Does NOT save/unlock progress for manual back. Progress is saved only by monster-quest-stage-complete.
+  */
   (function(){
+    const STAGE_NUMBER = 2;
     const MONSTER_QUEST_MAIN_URL = 'https://limkimsze-maker.github.io/P3_More_Word_Problems_Monster_Quest_Main_Page/';
-    function buildReturnUrl(stageNumber, reason){
-      const stage = Number(stageNumber || 0) || '';
+
+    function buildReturnUrl(reason){
       const qs = new URLSearchParams({
-        mq_return: 'stage' + stage,
+        mq_return: 'stage' + STAGE_NUMBER,
         reason: reason || 'manual',
         ts: String(Date.now())
       });
       return MONSTER_QUEST_MAIN_URL + '?' + qs.toString();
     }
 
-    window.__returnToMonsterQuestMain = function(stageNumber, reason){
-      const target = buildReturnUrl(stageNumber, reason);
+    window.__returnToMonsterQuestMain = function(reason){
+      const target = buildReturnUrl(reason || 'manual');
       const btn = document.querySelector('.back-main-btn');
       if(btn){
         btn.setAttribute('href', target);
         btn.setAttribute('target', '_top');
       }
 
+      // First choice: ask the main hub to close and destroy this iframe.
+      // Do not include a stage number here, because manual return must not unlock progress.
       try{
-        if(window.top && window.top !== window){
-          window.top.location.assign(target);
-        }else{
-          window.location.assign(target);
+        if(window.parent && window.parent !== window){
+          window.parent.postMessage({
+            type: 'monster-quest-return-main',
+            reason: reason || 'manual-back',
+            source: 'stage-' + STAGE_NUMBER,
+            ts: Date.now()
+          }, '*');
         }
-        return false;
-      }catch(e){
+      }catch(e){}
+
+      // Fallback only: if this stage is opened directly, return to the hub.
+      setTimeout(function(){
         try{
-          window.open(target, '_top');
-          return false;
-        }catch(e2){
-          window.location.href = target;
-          return false;
+          if(window.top && window.top !== window){
+            window.top.location.replace(target);
+          }else{
+            window.location.replace(target);
+          }
+        }catch(e){
+          try{ window.open(target, '_top'); }
+          catch(e2){ window.location.href = target; }
         }
-      }
+      }, 120);
+
+      return false;
     };
 
     function prepareBackLink(evt){
       const btn = evt.target && evt.target.closest ? evt.target.closest('.back-main-btn') : null;
       if(!btn) return;
-      const stage = btn.getAttribute('data-stage-return') || '2';
-      const target = buildReturnUrl(stage, 'manual');
-      btn.setAttribute('href', target);
+      btn.setAttribute('href', buildReturnUrl('manual'));
       btn.setAttribute('target', '_top');
     }
 
@@ -433,13 +448,12 @@
     document.addEventListener('click', function(evt){
       const btn = evt.target && evt.target.closest ? evt.target.closest('.back-main-btn') : null;
       if(!btn) return;
-      prepareBackLink(evt);
       try{
         evt.preventDefault();
         evt.stopPropagation();
         evt.stopImmediatePropagation();
       }catch(e){}
-      return window.__returnToMonsterQuestMain(btn.getAttribute('data-stage-return') || '2', 'manual');
+      return window.__returnToMonsterQuestMain('manual-back');
     }, true);
   })();
   </script>
@@ -449,7 +463,7 @@
 <a class="back-main-btn"
    href="https://limkimsze-maker.github.io/P3_More_Word_Problems_Monster_Quest_Main_Page/?mq_return=stage2"
    target="_top"
-   data-stage-return="2">
+   onclick="return window.__returnToMonsterQuestMain('manual-back');">
   Back to Main Page
 </a>
 
@@ -756,12 +770,6 @@
         }, '*');
       }
     } catch (e) {}
-
-    if (window.__returnToMonsterQuestMain) {
-      window.__returnToMonsterQuestMain(stageNumber, 'complete');
-    } else {
-      window.location.href = 'https://limkimsze-maker.github.io/P3_More_Word_Problems_Monster_Quest_Main_Page/?mq_return=stage' + stageNumber + '&reason=complete&ts=' + Date.now();
-    }
   }
 
   function queueStageComplete(stageNumber, delayMs){
@@ -1132,7 +1140,7 @@
 
   els.btnNew.addEventListener('click', ()=>{ state.solvedCount = 0; startNewQuestion(); });
   els.btnCheck.addEventListener('click', check);
-  els.btnRewardPlayAgain.addEventListener('click', ()=>{ signalStageComplete(2); });
+  els.btnRewardPlayAgain.addEventListener('click', ()=>{ signalStageComplete(2); if(window.__returnToMonsterQuestMain) window.__returnToMonsterQuestMain('complete-button'); });
   window.addEventListener('resize', ()=>{ fitToViewport(); resizeConfetti(); });
   window.addEventListener('load', ()=>{ fitToViewport(); resizeConfetti(); });
   if(window.ResizeObserver){ new ResizeObserver(fitToViewport).observe(document.querySelector('.leftBd')); }
