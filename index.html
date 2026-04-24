@@ -379,10 +379,35 @@
     }
   </style>
 
+  <script>
+  /* Reliable Monster Quest return helper: forces the TOP page back to the main map. */
+  (function(){
+    const MONSTER_QUEST_MAIN_URL = 'https://limkimsze-maker.github.io/P3_More_Word_Problems_Monster_Quest_Main_Page/';
+    window.__returnToMonsterQuestMain = function(stageNumber, reason){
+      const stage = Number(stageNumber || 0) || '';
+      const stamp = Date.now();
+      const hash = '#stage' + stage + '-return-' + (reason || 'manual') + '-' + stamp;
+      const target = MONSTER_QUEST_MAIN_URL + hash;
+      try{
+        if(window.top && window.top !== window){
+          window.top.location.href = target;
+        }else{
+          window.location.href = target;
+        }
+      }catch(e){
+        window.location.href = target;
+      }
+      return false;
+    };
+  })();
+  </script>
+
 </head>
 <body>
 <a class="back-main-btn"
-   href="https://limkimsze-maker.github.io/P3_More_Word_Problems_Monster_Quest_Main_Page/">
+   href="https://limkimsze-maker.github.io/P3_More_Word_Problems_Monster_Quest_Main_Page/#stage2-return-manual"
+   target="_top"
+   onclick="return window.__returnToMonsterQuestMain ? window.__returnToMonsterQuestMain(2, 'manual') : true;">
   Back to Main Page
 </a>
 
@@ -687,19 +712,14 @@
           stage: stageNumber,
           nextStage: Math.min(8, stageNumber + 1)
         }, '*');
-        return;
       }
     } catch (e) {}
 
-    try {
-      const hubCandidates = [
-        './monster-quest-stage-hub-return-to-map.html?completed=' + stageNumber,
-        './monster-quest-stage-hub.html?completed=' + stageNumber,
-        '../monster-quest-stage-hub-return-to-map.html?completed=' + stageNumber,
-        '../monster-quest-stage-hub.html?completed=' + stageNumber
-      ];
-      window.location.href = hubCandidates[0];
-    } catch (e) {}
+    if (window.__returnToMonsterQuestMain) {
+      window.__returnToMonsterQuestMain(stageNumber, 'complete');
+    } else {
+      window.location.href = 'https://limkimsze-maker.github.io/P3_More_Word_Problems_Monster_Quest_Main_Page/#stage' + stageNumber + '-complete-' + Date.now();
+    }
   }
 
   function queueStageComplete(stageNumber, delayMs){
