@@ -1193,29 +1193,43 @@
 
   <style id="monster-quest-iframe-mobile-scroll-fix">
     @media (max-width:1100px){
+      /*
+        Use the document itself as the scroller.
+        Do not create a second 100dvh scrolling container inside the hub iframe.
+      */
       html,body{
-        height:100dvh !important;
-        min-height:0 !important;
-        overflow:hidden !important;
-      }
-      body{
-        padding-bottom:0 !important;
-      }
-      .app{
-        width:100% !important;
-        height:100dvh !important;
-        min-height:0 !important;
-        max-height:100dvh !important;
+        height:auto !important;
+        min-height:100% !important;
         overflow-x:hidden !important;
         overflow-y:auto !important;
         -webkit-overflow-scrolling:touch !important;
-        overscroll-behavior-y:contain;
-        touch-action:pan-y;
+        overscroll-behavior-y:auto !important;
+        touch-action:pan-y !important;
+      }
+      body{
+        position:relative !important;
         padding-bottom:calc(120px + env(safe-area-inset-bottom)) !important;
+      }
+      .app{
+        width:100% !important;
+        height:auto !important;
+        min-height:100dvh !important;
+        max-height:none !important;
+        overflow:visible !important;
+        padding-bottom:0 !important;
       }
       .main{
         overflow:visible !important;
         flex:none !important;
+        min-height:0 !important;
+      }
+      .leftCard,
+      #toolsCard,
+      .leftBd,
+      .fitViewport,
+      .fitStage,
+      .questionShell{
+        overflow:visible !important;
       }
       .footer{
         margin-bottom:calc(24px + env(safe-area-inset-bottom)) !important;
