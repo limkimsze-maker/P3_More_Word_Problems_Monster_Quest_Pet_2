@@ -1239,6 +1239,164 @@
       }
     }
   </style>
+
+<style id="stage2-mobile-polish-20260926">
+  @media (max-width:1100px){
+    .partABox,
+    .partBBox{
+      padding:10px !important;
+      margin-bottom:10px !important;
+      overflow:hidden !important;
+    }
+
+    .partHeader{
+      margin-bottom:6px !important;
+    }
+
+    .modelArea{
+      margin-top:2px !important;
+    }
+
+    /* Keep all four operation choices together on one clean row. */
+    .opBank{
+      display:grid !important;
+      grid-template-columns:repeat(4,44px) !important;
+      justify-content:center !important;
+      align-items:center !important;
+      gap:10px !important;
+      margin-top:8px !important;
+      padding-bottom:8px !important;
+    }
+    .opBankLabel{
+      grid-column:1 / -1 !important;
+      width:100% !important;
+      margin-bottom:0 !important;
+      font-size:15px !important;
+      text-align:left !important;
+    }
+    .opChip{
+      width:44px !important;
+      height:44px !important;
+      font-size:22px !important;
+    }
+
+    /* Stable 5-column equation: amount, op, amount, =, answer. */
+    .eqBox,
+    html.mq-stage2-phone .eqBox{
+      display:grid !important;
+      grid-template-columns:
+        minmax(0,1fr)
+        32px
+        minmax(0,1fr)
+        16px
+        minmax(0,1.08fr) !important;
+      align-items:center !important;
+      justify-items:stretch !important;
+      width:100% !important;
+      max-width:100% !important;
+      flex-wrap:nowrap !important;
+      gap:3px !important;
+      padding:10px 7px !important;
+      margin-top:8px !important;
+      overflow:hidden !important;
+      font-size:16px !important;
+    }
+
+    .partBBox .eqBox,
+    html.mq-stage2-phone .partBBox .eqBox{
+      margin-top:4px !important;
+    }
+
+    .eqBox > span{
+      min-width:0 !important;
+    }
+
+    .eqBox .moneyField{
+      display:flex !important;
+      width:100% !important;
+      min-width:0 !important;
+      align-items:center !important;
+      gap:2px !important;
+    }
+
+    .eqBox .moneyField .dollar{
+      flex:0 0 10px !important;
+      width:10px !important;
+      min-width:10px !important;
+      font-size:16px !important;
+      text-align:center !important;
+    }
+
+    .eqBox .blankInput,
+    .eqBox .blankInput.small,
+    .eqBox .blankInput.long{
+      flex:1 1 auto !important;
+      width:calc(100% - 12px) !important;
+      min-width:0 !important;
+      max-width:none !important;
+      height:38px !important;
+      padding:0 2px !important;
+      font-size:15px !important;
+    }
+
+    .eqBox .opSlot{
+      width:32px !important;
+      min-width:32px !important;
+      height:32px !important;
+      flex:0 0 32px !important;
+      font-size:17px !important;
+    }
+
+    /* Remove unused vertical air around the diagrams. */
+    .barModel{
+      height:154px !important;
+      margin-top:4px !important;
+    }
+
+    .remainArea{
+      height:220px !important;
+      margin-top:2px !important;
+    }
+
+    .sentence{
+      margin-top:10px !important;
+      font-size:19px !important;
+      line-height:1.34 !important;
+    }
+
+    .moneyInlineSentence{
+      max-width:150px !important;
+    }
+
+    .moneyInlineSentence .blankInput.long{
+      width:108px !important;
+      max-width:108px !important;
+      height:40px !important;
+      font-size:16px !important;
+    }
+
+    .controlsFrameInner{
+      gap:6px !important;
+      padding:9px !important;
+    }
+
+    .controlsFrameInner .btn{
+      min-width:0 !important;
+      padding:9px 7px !important;
+      font-size:12px !important;
+    }
+
+    .back-main-btn{
+      right:6px !important;
+      bottom:calc(78px + env(safe-area-inset-bottom)) !important;
+      padding:4px 7px !important;
+      font-size:9px !important;
+      border-width:1.5px !important;
+      opacity:.78 !important;
+      box-shadow:0 2px 6px rgba(0,0,0,.14) !important;
+    }
+  }
+</style>
 </head>
 <body>
 <a class="back-main-btn"
