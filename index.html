@@ -1629,6 +1629,7 @@
   function startNewQuestion(){
     clearTimeout(stageCompleteTimer);
     stageCompleteSent = false;
+    if(typeof clearWorkingSpace === 'function') clearWorkingSpace();
     showSolvePage();
     state.data = makeVariation();
     state.mode = 'solve';
@@ -1951,16 +1952,21 @@
   function startDraw(e){ drawing=true; last=point(e); e.preventDefault(); }
   function moveDraw(e){ if(!drawing) return; const p=point(e); ctx.beginPath(); ctx.moveTo(last.x,last.y); ctx.lineTo(p.x,p.y); ctx.stroke(); last=p; e.preventDefault(); }
   function endDraw(){ drawing=false; last=null; }
+
+  function clearWorkingSpace(){
+    drawing=false;
+    last=null;
+    const r = canvas.getBoundingClientRect();
+    ctx.clearRect(0,0,r.width,r.height);
+  }
+
   canvas.addEventListener('mousedown', startDraw);
   canvas.addEventListener('mousemove', moveDraw);
   window.addEventListener('mouseup', endDraw);
   canvas.addEventListener('touchstart', startDraw, {passive:false});
   canvas.addEventListener('touchmove', moveDraw, {passive:false});
   window.addEventListener('touchend', endDraw, {passive:false});
-  document.getElementById('btnWorkClearTop').addEventListener('click', ()=>{
-    const r = canvas.getBoundingClientRect();
-    ctx.clearRect(0,0,r.width,r.height);
-  });
+  document.getElementById('btnWorkClearTop').addEventListener('click', clearWorkingSpace);
   window.addEventListener('resize', resizeCanvas);
   setTimeout(resizeCanvas, 50);
 
